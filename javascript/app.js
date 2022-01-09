@@ -18,11 +18,13 @@ async function apodImages() {
   const data = await fetchedData.json();
   console.log(data);
   data.forEach((photo) => {
-    const galleryImg = document.createElement("div");
-    galleryImg.classList.add("gallery-img");
-    galleryImg.innerHTML = `<img src="${photo.url}"></img>
-    <p>${photo.title}</p>`;
-    gallery.appendChild(galleryImg);
+    if (photo.media_type === "image") {
+      const galleryImg = document.createElement("div");
+      galleryImg.classList.add("gallery-img");
+      galleryImg.innerHTML = `<img src="${photo.url}"></img>
+      <p>${photo.title}</p>`;
+      gallery.appendChild(galleryImg);
+    }
   });
 }
 
