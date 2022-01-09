@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/jordan1166/spacestagram#readme",
   "devDependencies": {
-    "eslint": "^8.6.0",
     "jest": "^27.4.7"
   }
 }
