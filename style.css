@@ -46,3 +46,10 @@ header h2 {
   color: white;
   cursor: pointer;
 }
+
+.title-like {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: gray;
+}
