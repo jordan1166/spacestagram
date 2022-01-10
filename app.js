@@ -33,6 +33,17 @@ async function fetchAPI(url) {
   return await fetchedData.json();
 }
 
+// Adds HTML to display image, the title of the image, and a like button
+function addInnerHTML(data) {
+  return `
+    <img src="${data.url}"></img>
+    <div class="title-like">
+      <p>${data.title}</p>
+      <button class="like-button">Like</button>
+    </div>
+  `;
+}
+
 function displayImages(data) {
   if (data.length > 1) {
     // If multiple images are fetched, use forEach loop to display them
@@ -40,8 +51,7 @@ function displayImages(data) {
       if (photo.media_type === "image") {
         const galleryImg = document.createElement("div");
         galleryImg.classList.add("gallery-img");
-        galleryImg.innerHTML = `<img src="${photo.url}"></img>
-    <p>${photo.title}</p>`;
+        galleryImg.innerHTML = addInnerHTML(photo);
         gallery.appendChild(galleryImg);
       }
     });
@@ -50,8 +60,7 @@ function displayImages(data) {
     if (data.media_type === "image") {
       const galleryImg = document.createElement("div");
       galleryImg.classList.add("gallery-img");
-      galleryImg.innerHTML = `<img src="${data.url}"></img>
-  <p>${data.title}</p>`;
+      galleryImg.innerHTML = addInnerHTML(data);
       gallery.appendChild(galleryImg);
     }
   }
@@ -66,6 +75,7 @@ async function apodImages() {
 }
 // Search for image using a specific date
 async function searchImage(search) {
+  clear();
   const data = await fetchAPI(
     `https://api.nasa.gov/planetary/apod?api_key=${authKey}&date=${search}`
   );
@@ -74,6 +84,12 @@ async function searchImage(search) {
     alert(data.msg);
   }
   displayImages(data);
+}
+
+// Clears images from page and clears text from search input form
+function clear() {
+  gallery.innerHTML = "";
+  searchInput.value = "";
 }
 
 apodImages();
