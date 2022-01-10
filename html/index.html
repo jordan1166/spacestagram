@@ -11,14 +11,19 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/css/style.css" />
-    <script src="/javascript/app.js" defer></script>
+    <script type="module" src="../javascript/app.js" defer></script>
     <title>Spacestagram</title>
   </head>
   <body>
     <header>
       <h2><a id="logo" href="./index.html">Spacestagram</a></h2>
       <form class="search-form">
-        <input type="text" name="search" class="search-input" />
+        <input
+          type="text"
+          name="search"
+          class="search-input"
+          placeholder="YYYY-MM-DD"
+        />
         <button type="submit" class="submit-button">Search</button>
       </form>
     </header>

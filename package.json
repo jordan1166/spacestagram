@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "jest"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "url": "https://github.com/jordan1166/spacestagram/issues"
   },
   "homepage": "https://github.com/jordan1166/spacestagram#readme",
-  "devDependencies": {
-    "jest": "^27.4.7"
+  "dependencies": {
+    "dotenv": "^10.0.0"
   }
 }
