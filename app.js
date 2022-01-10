@@ -3,6 +3,7 @@ import auth from "./auth.js";
 const gallery = document.querySelector(".gallery");
 const searchInput = document.querySelector(".search-input");
 const searchForm = document.querySelector(".search-form");
+const likeButton = document.querySelector(".like-button");
 let searchValue;
 
 const authKey = auth.API_KEY;
@@ -15,6 +16,13 @@ searchInput.addEventListener("input", updateInput);
 searchForm.addEventListener("submit", (event) => {
   event.preventDefault();
   searchImage(searchValue);
+});
+// Toggle like button when clicked
+document.querySelector("body").addEventListener("click", (event) => {
+  if (event.target.id === "like") {
+    event.target.classList.toggle("fas");
+    event.target.classList.toggle("colorRed");
+  }
 });
 
 function updateInput(event) {
@@ -36,15 +44,17 @@ async function fetchAPI(url) {
 // Adds HTML to display image, the title of the image, and a like button
 function addInnerHTML(data) {
   return `
+    <p class="date">Date: ${data.date}</p>
     <img src="${data.url}"></img>
     <div class="title-like">
       <p>${data.title}</p>
-      <button class="like-button">Like</button>
+      <button class="like-button"><i id="like" class="far fa-heart"></i></button>
     </div>
   `;
 }
 
 function displayImages(data) {
+  console.log(data);
   if (data.length > 1) {
     // If multiple images are fetched, use forEach loop to display them
     data.forEach((photo) => {

@@ -47,6 +47,10 @@ header h2 {
   cursor: pointer;
 }
 
+.date {
+  color: gray;
+}
+
 .title-like {
   display: flex;
   justify-content: space-between;
@@ -76,6 +80,17 @@ header h2 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.like-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.colorRed {
+  color: red;
 }
 
 .more {
