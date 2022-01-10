@@ -8,7 +8,10 @@ let searchValue;
 const authKey = auth.API_KEY;
 
 // Event listeners
+
+// Update the value of the search form input as the user types
 searchInput.addEventListener("input", updateInput);
+// When the search button is clicked, call the searchImage function with 'searchValue' as an argument
 searchForm.addEventListener("submit", (event) => {
   event.preventDefault();
   searchImage(searchValue);
@@ -16,62 +19,61 @@ searchForm.addEventListener("submit", (event) => {
 
 function updateInput(event) {
   searchValue = event.target.value;
-  console.log(typeof searchValue);
 }
 
-async function apodImages() {
-  // Fetch data from NASA imag api
-  const fetchedData = await fetch(
-    `https://api.nasa.gov/planetary/apod?api_key=${authKey}&count=15&concept_tags=false'`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    }
-  );
+async function fetchAPI(url) {
+  // Fetch data from NASA image api
+  const fetchedData = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  });
   // Parse response into JSON
-  const data = await fetchedData.json();
-  console.log(data);
-  // Display images on webpage
-  data.forEach((photo) => {
-    if (photo.media_type === "image") {
+  return await fetchedData.json();
+}
+
+function displayImages(data) {
+  if (data.length > 1) {
+    // If multiple images are fetched, use forEach loop to display them
+    data.forEach((photo) => {
+      if (photo.media_type === "image") {
+        const galleryImg = document.createElement("div");
+        galleryImg.classList.add("gallery-img");
+        galleryImg.innerHTML = `<img src="${photo.url}"></img>
+    <p>${photo.title}</p>`;
+        gallery.appendChild(galleryImg);
+      }
+    });
+  } else {
+    // If user searches for one image display that image
+    if (data.media_type === "image") {
       const galleryImg = document.createElement("div");
       galleryImg.classList.add("gallery-img");
-      galleryImg.innerHTML = `<img src="${photo.url}"></img>
-      <p>${photo.title}</p>`;
+      galleryImg.innerHTML = `<img src="${data.url}"></img>
+  <p>${data.title}</p>`;
       gallery.appendChild(galleryImg);
     }
-  });
+  }
 }
 
-async function searchImage(search) {
-  // Fetch data from NASA imag api
-  try {
-  } catch (error) {}
-  const fetchedData = await fetch(
-    `https://api.nasa.gov/planetary/apod?api_key=${authKey}&date=${search}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    }
+// Display random images when the page loads
+async function apodImages() {
+  const data = await fetchAPI(
+    `https://api.nasa.gov/planetary/apod?api_key=${authKey}&count=15&concept_tags=false`
   );
-  // Parse response into JSON
-  const data = await fetchedData.json();
+  displayImages(data);
+}
+// Search for image using a specific date
+async function searchImage(search) {
+  const data = await fetchAPI(
+    `https://api.nasa.gov/planetary/apod?api_key=${authKey}&date=${search}`
+  );
   // If date is not within the correct range, display an error message
   if (data.msg) {
     alert(data.msg);
   }
-  // Display image on webpage
-  if (data.media_type === "image") {
-    const galleryImg = document.createElement("div");
-    galleryImg.classList.add("gallery-img");
-    galleryImg.innerHTML = `<img src="${data.url}"></img>
-    <p>${data.title}</p>`;
-    gallery.appendChild(galleryImg);
-  }
+  displayImages(data);
 }
 
 apodImages();
