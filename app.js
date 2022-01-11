@@ -3,8 +3,10 @@ import auth from "./auth.js";
 const gallery = document.querySelector(".gallery");
 const searchInput = document.querySelector(".search-input");
 const searchForm = document.querySelector(".search-form");
-const likeButton = document.querySelector(".like-button");
+const loadDiv = document.querySelector(".load-div");
 let searchValue;
+const more = document.querySelector(".more");
+let fetchLink;
 
 const authKey = auth.API_KEY;
 
@@ -16,6 +18,7 @@ searchInput.addEventListener("input", updateInput);
 searchForm.addEventListener("submit", (event) => {
   event.preventDefault();
   searchImage(searchValue);
+  more.remove();
 });
 // Toggle like button when clicked
 document.querySelector("body").addEventListener("click", (event) => {
@@ -25,12 +28,17 @@ document.querySelector("body").addEventListener("click", (event) => {
   }
 });
 
+// When 'More' button is clicked, load more images
+more.addEventListener("click", apodImages);
+
 function updateInput(event) {
   searchValue = event.target.value;
 }
 
 async function fetchAPI(url) {
   // Fetch data from NASA image api
+  // Display loading animation
+  loadDiv.classList.add("loader");
   const fetchedData = await fetch(url, {
     method: "GET",
     headers: {
@@ -38,6 +46,8 @@ async function fetchAPI(url) {
     },
   });
   // Parse response into JSON
+  // Remove loading animation
+  loadDiv.classList.remove("loader");
   return await fetchedData.json();
 }
 
@@ -78,17 +88,15 @@ function displayImages(data) {
 
 // Display random images when the page loads
 async function apodImages() {
-  const data = await fetchAPI(
-    `https://api.nasa.gov/planetary/apod?api_key=${authKey}&count=15&concept_tags=false`
-  );
+  fetchLink = `https://api.nasa.gov/planetary/apod?api_key=${authKey}&count=5&concept_tags=false`;
+  const data = await fetchAPI(fetchLink);
   displayImages(data);
 }
 // Search for image using a specific date
 async function searchImage(search) {
   clear();
-  const data = await fetchAPI(
-    `https://api.nasa.gov/planetary/apod?api_key=${authKey}&date=${search}`
-  );
+  fetchLink = `https://api.nasa.gov/planetary/apod?api_key=${authKey}&date=${search}`;
+  const data = await fetchAPI(fetchLink);
   // If date is not within the correct range, display an error message
   if (data.msg) {
     alert(data.msg);
